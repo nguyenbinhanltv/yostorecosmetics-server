@@ -35,38 +35,16 @@ module.exports.getProducts = async (req, res) => {
 //Create 1 product
 module.exports.createProduct = (req, res) => {
   let data = req.body;
-  let productPrice = new ProductPrice({
-    productRetailPrice: data.productRetailPrice,
-    productWholesalePrice: data.productWholesalePrice,
-    productStockPrice: data.productStockPrice
-  });
-  let productClassification = new ProductClassification({
-    productType: data.productType,
-    productMark: data.productMark
-  });
-  let productWareHouse = new ProductWareHouse({
-    productWeight: data.productWeight,
-    productUnit: data.productUnit
-  });
-
-  let resultData = new Product({
-    productId: data.productId,
-    productName: data.productName,
-    productBarCode: data.productBarCode,
-    productPrice,
-    productClassification,
-    productWareHouse
-  });
 
   firebaseHelper
   .firestore
-  .createNewDocument(db, collectionName, resultData)
+  .createNewDocument(db, collectionName, data)
   .then(doc => {
-    data.id = doc.id;
+    data.productId = doc.id;
     firebaseHelper
     .firestore
-    .updateDocument(db, collectionName, data.id, data)
-    .then(doc => res.status(200).send(`Add Product ${data.id} Successfully !`))
+    .updateDocument(db, collectionName, data.productId, data)
+    .then(doc => res.status(201).send(`Create Product ${data.productId} Successfully !`))
     .catch(err => res.status(400).send(err));
   })
   .catch(err => res.status(400).send(err));
@@ -75,34 +53,11 @@ module.exports.createProduct = (req, res) => {
 //Update 1 product
 module.exports.updateProduct = (req, res) => {
   const productId = req.params.productId;
-
   let data = req.body;
-  let productPrice = new ProductPrice({
-    productRetailPrice: data.productRetailPrice,
-    productWholesalePrice: data.productWholesalePrice,
-    productStockPrice: data.productStockPrice
-  });
-  let productClassification = new ProductClassification({
-    productType: data.productType,
-    productMark: data.productMark
-  });
-  let productWareHouse = new ProductWareHouse({
-    productWeight: data.productWeight,
-    productUnit: data.productUnit
-  });
-
-  let resultData = new Product({
-    productId: data.productId,
-    productName: data.productName,
-    productBarCode: data.productBarCode,
-    productPrice,
-    productClassification,
-    productWareHouse
-  });
 
   firebaseHelper
   .firestore
-  .updateDocument(db, collectionName, productId, resultData)
+  .updateDocument(db, collectionName, productId, data)
   .then(doc => res.status(200).send(`Update product ${productId} successfully !!!`))
   .catch(err => res.status(400).send(err));
 };
@@ -113,6 +68,6 @@ module.exports.deleteProduct = (req, res) => {
   firebaseHelper
   .firestore
   .deleteDocument(db, collectionName, productId)
-  .then(doc => res.status(200).send(`Delete product ${leadersId} successfully !!!`))
+  .then(doc => res.status(200).send(`Delete product ${productId} successfully !!!`))
   .catch(err => res.status(400).send(err));
 };
