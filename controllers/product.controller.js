@@ -3,9 +3,6 @@ const firebaseHelper = require('firebase-functions-helper/dist');
 
 //Model
 const Product = require('../models/product/product.model').Product;
-const ProductPrice = require('../models/product/productPrice.model').ProductPrice;
-const ProductClassification = require('../models/product/productClassification.model').ProductClassification;
-const ProductWareHouse = require('../models/product/productWareHouse.model').ProductWareHouse;
 
 const db = admin.firestore();
 const collectionName = 'products';
@@ -17,7 +14,7 @@ module.exports.getProduct = (req, res) => {
   .firestore
   .getDocument(db, collectionName, productId)
   .then(doc => res.status(200).send(doc))
-  .catch(err => res.status(400).send(err));
+  .catch(err => res.status(400).send('Error'));
 };
 
 //Get all product
@@ -29,7 +26,7 @@ module.exports.getProducts = async (req, res) => {
     data.push(doc.data());
   }))
   .then(doc => res.status(200).send(data))
-  .catch(err => res.status(400).send(err));
+  .catch(err => res.status(400).send('Error'));
 };
 
 //Create 1 product
@@ -45,9 +42,9 @@ module.exports.createProduct = (req, res) => {
     .firestore
     .updateDocument(db, collectionName, data.productId, data)
     .then(doc => res.status(201).send(`Create Product ${data.productId} Successfully !`))
-    .catch(err => res.status(400).send(err));
+    .catch(err => res.status(400).send('Error'));
   })
-  .catch(err => res.status(400).send(err));
+  .catch(err => res.status(400).send('Error'));
 };
 
 //Update 1 product
@@ -59,7 +56,7 @@ module.exports.updateProduct = (req, res) => {
   .firestore
   .updateDocument(db, collectionName, productId, data)
   .then(doc => res.status(200).send(`Update product ${productId} successfully !!!`))
-  .catch(err => res.status(400).send(err));
+  .catch(err => res.status(400).send('Error'));
 };
 
 //Delete 1 product
@@ -69,5 +66,5 @@ module.exports.deleteProduct = (req, res) => {
   .firestore
   .deleteDocument(db, collectionName, productId)
   .then(doc => res.status(200).send(`Delete product ${productId} successfully !!!`))
-  .catch(err => res.status(400).send(err));
+  .catch(err => res.status(400).send('Error'));
 };
