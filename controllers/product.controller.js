@@ -2,7 +2,6 @@ const admin = require('firebase-admin');
 const firebaseHelper = require('firebase-functions-helper/dist');
 
 //Model
-const Product = require('../models/product/product.model').Product;
 
 const db = admin.firestore();
 const collectionName = 'products';

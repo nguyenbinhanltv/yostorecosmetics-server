@@ -1,7 +1,3 @@
-const ProductPrice = require('./productPrice.model').ProductPrice;
-const ProductClassification = require('./productClassification.model').ProductClassification;
-const ProductWareHouse = require('./productWareHouse.model').ProductWareHouse;
-
 class Product {
     constructor(options) {
         this.productName = options.productName; //string
