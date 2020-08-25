@@ -32,6 +32,8 @@ module.exports.getProducts = async (req, res) => {
 module.exports.createProduct = (req, res) => {
   let data = req.body;
   data['productTimeCreated'] = new Date().toLocaleDateString("en-US");
+  data['productAmount'] = 0;
+  data['productStatus'] = 'OUTOFSTOCK';
 
   firebaseHelper
   .firestore
