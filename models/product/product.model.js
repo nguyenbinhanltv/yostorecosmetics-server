@@ -14,6 +14,7 @@ class Product {
         this.productMark = options.productMark; //string
         this.productWeight = options.productWeight; //string
         this.productUnit = options.productUnit; //string
+        this.productOrigin = options.productOrigin; //<America, France>
     }
 }
 

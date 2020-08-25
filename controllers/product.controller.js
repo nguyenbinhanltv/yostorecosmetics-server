@@ -32,7 +32,7 @@ module.exports.getProducts = async (req, res) => {
 //Create 1 product
 module.exports.createProduct = (req, res) => {
   let data = req.body;
-  data['productTimeCreated'] = new Date().toUTCString();
+  data['productTimeCreated'] = new Date().toLocaleDateString("en-US");
 
   firebaseHelper
   .firestore
