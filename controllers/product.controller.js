@@ -35,6 +35,10 @@ module.exports.createProduct = (req, res) => {
   data['productAmount'] = 0;
   data['productStatus'] = 'OUTOFSTOCK';
 
+  data['productMark'] = data['productMark'][0].name;
+  data['productOrigin'] = data['productOrigin'][0].name;
+  data['productUnit'] = data['productUnit'][0].name;
+
   firebaseHelper
     .firestore
     .createNewDocument(db, collectionName, data)
