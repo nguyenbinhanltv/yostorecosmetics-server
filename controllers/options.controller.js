@@ -8,10 +8,10 @@ const collectionName = 'options';
 
 //Get 1 option
 module.exports.getOption = (req, res) => {
-  const optiontId = req.params.optiontId;
+  const optionId = req.params.optionId;
   firebaseHelper
     .firestore
-    .getDocument(db, collectionName, optiontId)
+    .getDocument(db, collectionName, optionId)
     .then(doc => res.status(200).send(doc))
     .catch(err => res.status(400).send('Error'));
 };
