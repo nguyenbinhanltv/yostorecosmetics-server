@@ -6,6 +6,7 @@ const firebaseHelper = require('firebase-functions-helper/dist');
 const db = admin.firestore();
 const collectionName = 'purchase-orders';
 
+//Get all purchase-orders
 module.exports.getPurchaseOrders = async (req, res) => {
     let data = [];
     const optionsRef = db.collection(collectionName);
@@ -17,6 +18,7 @@ module.exports.getPurchaseOrders = async (req, res) => {
         .catch(err => res.status(400).send('Error'));
 }
 
+//Get 1 purchase-orders
 module.exports.getOnePurchaseOrders = (req, res) => {
     const purchaseOrdersId = req.params.purchaseOrdersId;
 
@@ -27,6 +29,7 @@ module.exports.getOnePurchaseOrders = (req, res) => {
         .catch(err => res.status(400).send('Error'));
 }
 
+//Create 1 purchase-orders
 module.exports.createOnePurchaseOrders = (req, res) => {
     let data = req.body;
 
@@ -46,4 +49,27 @@ module.exports.createOnePurchaseOrders = (req, res) => {
         })
         .catch(err => res.status(400).send('Error'));
 
+}
+
+//Update 1 purchase-orders
+module.exports.updateOnePurchaseOrders = (req, res) => {
+    const purchaseOrdersId = req.params.purchaseOrdersId;
+    const data = req.body;
+
+    firebaseHelper
+        .firestore
+        .updateDocument(db, collectionName, purchaseOrdersId, data)
+        .then(doc => res.status(200).send(`Update PurchaseOrders ${data.purchaseOrdersId} Successfully !`))
+        .catch(err => res.status(400).send('Error'));
+}
+
+//Delete 1 pruchase-orders
+module.exports.deleteOnePurchaseOrders = (req, res) => {
+    const purchaseOrdersId = req.params.purchaseOrdersId;
+
+    firebaseHelper
+        .firestore
+        .deleteDocument(db, collectionName, purchaseOrdersId)
+        .then(doc => res.status(200).send(`Delete PurchaseOrders ${data.purchaseOrdersId} Successfully !`))
+        .catch(err => res.status(400).send('Error'));
 }
