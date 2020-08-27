@@ -33,6 +33,7 @@ module.exports.getOnePurchaseOrders = (req, res) => {
 module.exports.createOnePurchaseOrders = (req, res) => {
     let data = req.body;
 
+    data['purchaseOrdersTimeCreated'] = new Date().toLocaleDateString("en-US");
     data['purchaseOrdersStatus'] = data['purchaseOrdersStatus'][0].name;
     data['purchaseOrdersPaymentStatus'] = data['purchaseOrdersPaymentStatus'][0].name;
 
