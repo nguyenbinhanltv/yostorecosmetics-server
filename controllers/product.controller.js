@@ -58,6 +58,22 @@ module.exports.updateProduct = (req, res) => {
   const productId = req.params.productId;
   let data = req.body;
 
+  let firebaseData = firebaseHelper
+                        .firestore
+                        .getDocument(db, collectionName, productId)
+                        .then(doc => doc)
+                        .catch(err => err);
+  
+  if (firebaseData['productAmount'] && firebaseData['productAmount'] > 0) {
+    data['productAmount'] += firebaseData['productAmount'];
+    if (data['productAmount'] <= 10) {
+      data['productStatus'] = 'LOWSTOCK';
+    }
+    if (data['productAmount'] > 10) {
+      data['productStatus'] = 'INSTOCK';
+    }
+  }
+
   firebaseHelper
     .firestore
     .updateDocument(db, collectionName, productId, data)
