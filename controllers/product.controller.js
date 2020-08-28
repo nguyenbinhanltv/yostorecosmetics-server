@@ -54,11 +54,11 @@ module.exports.createProduct = (req, res) => {
 };
 
 //Update 1 product
-module.exports.updateProduct = (req, res) => {
+module.exports.updateProduct = async (req, res) => {
   const productId = req.params.productId;
   let data = req.body;
 
-  let firebaseData = firebaseHelper
+  let firebaseData = await firebaseHelper
                         .firestore
                         .getDocument(db, collectionName, productId)
                         .then(doc => doc)
