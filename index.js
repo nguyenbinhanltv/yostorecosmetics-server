@@ -13,6 +13,7 @@ admin.initializeApp({
 //Router
 const productRouter = require('./routers/product.router');
 const optionsRouter = require('./routers/options.router');
+const purchaseOrdersRouter = require('./routers/purchaseOrders.router');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -23,7 +24,7 @@ app.use(bodyParser.json());
 //API
 app.use('/products', productRouter);
 app.use('/options', optionsRouter);
-
+app.use('/purchase-orders', purchaseOrdersRouter);
 
 app.listen(port, () => {
     console.log('Your server running at ' + port);
