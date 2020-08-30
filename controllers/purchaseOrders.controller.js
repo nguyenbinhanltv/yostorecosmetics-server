@@ -56,6 +56,8 @@ module.exports.createOnePurchaseOrders = (req, res) => {
 module.exports.updateOnePurchaseOrders = (req, res) => {
     const purchaseOrdersId = req.params.purchaseOrdersId;
     const data = req.body;
+    data['purchaseOrdersStatus'] = data['purchaseOrdersStatus'][0].name;
+    data['purchaseOrdersPaymentStatus'] = data['purchaseOrdersPaymentStatus'][0].name;
 
     firebaseHelper
         .firestore
