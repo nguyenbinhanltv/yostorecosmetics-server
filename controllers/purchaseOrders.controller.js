@@ -24,31 +24,41 @@ module.exports.getOnePurchaseOrders = (req, res) => {
 
     firebaseHelper
         .firestore
-        .getDocument(db, collectionName, purchaseOrdersId)
-        .then(doc => res.status(200).send(doc))
-        .catch(err => res.status(400).send('Error'));
+        .checkDocumentExists(db, collectionName, purchaseOrdersId)
+        .then(result => {
+            if (result.exists) {
+                firebaseHelper
+                    .firestore
+                    .getDocument(db, collectionName, purchaseOrdersId)
+                    .then(doc => res.status(200).send(doc))
+                    .catch(err => res.status(400).send('Error'));
+            }
+        })
+        .catch(err => res.status(400).send(`Do not have purchase-orders ${purchaseOrdersId}`));
 }
 
 //Create 1 purchase-orders
 module.exports.createOnePurchaseOrders = (req, res) => {
     let data = req.body;
 
-    data['purchaseOrdersTimeCreated'] = new Date().toLocaleDateString("en-US");
-    data['purchaseOrdersStatus'] = data['purchaseOrdersStatus'][0].name;
-    data['purchaseOrdersPaymentStatus'] = data['purchaseOrdersPaymentStatus'][0].name;
+    if (data) {
+        data['purchaseOrdersTimeCreated'] = new Date().toLocaleDateString("en-US");
+        data['purchaseOrdersStatus'] = data['purchaseOrdersStatus'][0].name;
+        data['purchaseOrdersPaymentStatus'] = data['purchaseOrdersPaymentStatus'][0].name;
 
-    firebaseHelper
-        .firestore
-        .createNewDocument(db, collectionName, data)
-        .then(doc => {
-            data.purchaseOrdersId = doc.id;
-            firebaseHelper
-                .firestore
-                .updateDocument(db, collectionName, data.purchaseOrdersId, data)
-                .then(doc => res.status(200).send(`Create PurchaseOrders ${data.purchaseOrdersId} Successfully !`))
-                .catch(err => res.status(400).send('Error'));
-        })
-        .catch(err => res.status(400).send('Error'));
+        firebaseHelper
+            .firestore
+            .createNewDocument(db, collectionName, data)
+            .then(doc => {
+                data.purchaseOrdersId = doc.id;
+                firebaseHelper
+                    .firestore
+                    .updateDocument(db, collectionName, data.purchaseOrdersId, data)
+                    .then(doc => res.status(200).send(`Create PurchaseOrders ${data.purchaseOrdersId} Successfully !`))
+                    .catch(err => res.status(400).send('Error'));
+            })
+            .catch(err => res.status(400).send('Error'));
+    }
 
 }
 
@@ -56,13 +66,22 @@ module.exports.createOnePurchaseOrders = (req, res) => {
 module.exports.updateOnePurchaseOrders = (req, res) => {
     const purchaseOrdersId = req.params.purchaseOrdersId;
     const data = req.body;
-    data['purchaseOrdersStatus'] = data['purchaseOrdersStatus'][0].name;
-    data['purchaseOrdersPaymentStatus'] = data['purchaseOrdersPaymentStatus'][0].name;
 
     firebaseHelper
         .firestore
-        .updateDocument(db, collectionName, purchaseOrdersId, data)
-        .then(doc => res.status(200).send(`Update PurchaseOrders ${data.purchaseOrdersId} Successfully !`))
+        .checkDocumentExists(db, collectionName, purchaseOrdersId)
+        .then(result => {
+            if (result.exists) {
+                data['purchaseOrdersStatus'] = data['purchaseOrdersStatus'][0].name;
+                data['purchaseOrdersPaymentStatus'] = data['purchaseOrdersPaymentStatus'][0].name;
+
+                firebaseHelper
+                    .firestore
+                    .updateDocument(db, collectionName, purchaseOrdersId, data)
+                    .then(doc => res.status(200).send(`Update PurchaseOrders ${data.purchaseOrdersId} Successfully !`))
+                    .catch(err => res.status(400).send('Error'));
+            }
+        })
         .catch(err => res.status(400).send('Error'));
 }
 
@@ -72,7 +91,15 @@ module.exports.deleteOnePurchaseOrders = (req, res) => {
 
     firebaseHelper
         .firestore
-        .deleteDocument(db, collectionName, purchaseOrdersId)
-        .then(doc => res.status(200).send(`Delete PurchaseOrders ${data.purchaseOrdersId} Successfully !`))
-        .catch(err => res.status(400).send('Error'));
+        .checkDocumentExists(db, collectionName, purchaseOrdersId)
+        .then(result => {
+            if (result.exists) {
+                firebaseHelper
+                    .firestore
+                    .deleteDocument(db, collectionName, purchaseOrdersId)
+                    .then(doc => res.status(200).send(`Delete PurchaseOrders ${purchaseOrdersId} Successfully !`))
+                    .catch(err => res.status(400).send('Error'));
+            }
+        })
+        .catch(err => res.status(400).send(`Do not have purchase-orders ${purchaseOrdersId}`));
 }
